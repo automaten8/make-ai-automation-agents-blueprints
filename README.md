@@ -1,6 +1,6 @@
 # 🤖 Make AI Automation Agents & Blueprints
 
-This repository contains modular AI-powered automation agents and workflow blueprints built in [Make](https://www.make.com). Each folder includes a specific automation use case—ranging from inbound lead handling to outbound prospecting and calendar scheduling.
+This repository contains modular AI-first automation agents and workflow blueprints built in [Make](https://www.make.com). Each folder includes a specific automation use case—ranging from inbound lead handling to outbound prospecting and calendar scheduling.
 
 ---
 
@@ -9,7 +9,7 @@ This repository contains modular AI-powered automation agents and workflow bluep
 - ✅ **Autonomous agents** that can qualify leads, book meetings, and respond to emails
 - 🔁 **Reusable sub-scenarios** like `get_available_time_slots` and `book_meeting`
 - 🧩 **Conditional logic + OpenAI GPT-4** for dynamic and personalized outputs
-- 🔗 Integrations with Gmail, Google Calendar, Sheets, Airtable, and external APIs
+- 🔗 Integrations with Gmail, Google Calendar, Sheets, Airtable, and external APIs via HTTP
 
 ---
 

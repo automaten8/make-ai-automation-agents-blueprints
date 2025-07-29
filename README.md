@@ -26,7 +26,7 @@ Each folder represents a specific automation use case:
 - `Calendar_Scheduling_Agent/`  
   Fetches availability from Google Calendar and automates meeting booking using webhooks.
 
-- `Common_Tools/`  
+- `Agent_Tools/`  
   Standalone Make scenarios used as callable agent tools (e.g. time slot lookup, meeting booking).
 
 ---
@@ -34,7 +34,7 @@ Each folder represents a specific automation use case:
 ## 🚀 How to Use
 
 1. Clone or download this repo
-2. Go to [Make.com](https://www.make.com)
+2. Go to [Make](https://www.make.com)
 3. Create a new scenario and click **Import Blueprint**
 4. Paste the contents of the `.json` file from any folder
 5. Customize modules for your tools (OpenAI keys, Gmail, Calendly, Airtable, etc.)
@@ -43,9 +43,10 @@ Each folder represents a specific automation use case:
 
 ## 🧩 Requirements
 
-- A Make.com account
+- A Make account
 - OpenAI API key (for GPT-powered agents)
-- API access to any 3rd-party tools you want to use (e.g. Gmail, Sheets, Calendly)
+- Perplexity API key (for deep research, source data)
+- API access to any 3rd-party tools you want to use (e.g. Gmail, CRM, GoogleSheets, RapidAPI, Apify, etc.)
 
 ---
 

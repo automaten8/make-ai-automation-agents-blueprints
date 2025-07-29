@@ -1,0 +1,413 @@
+{
+    "name": "get_available_calendar_slots",
+    "flow": [
+        {
+            "id": 8,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "parameters": {
+                "hook": 2363104,
+                "maxResults": 1
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 0
+                },
+                "restore": {
+                    "parameters": {
+                        "hook": {
+                            "data": {
+                                "editable": "true"
+                            },
+                            "label": "get_available_calendar_slots"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "hook",
+                        "type": "hook:gateway-webhook",
+                        "label": "Webhook",
+                        "required": true
+                    },
+                    {
+                        "name": "maxResults",
+                        "type": "number",
+                        "label": "Maximum number of results"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "start_date",
+                        "type": "text"
+                    },
+                    {
+                        "name": "end_date",
+                        "type": "text"
+                    },
+                    {
+                        "name": "timezone",
+                        "type": "text"
+                    }
+                ],
+                "advanced": true
+            }
+        },
+        {
+            "id": 9,
+            "module": "util:SetVariables",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "scope": "roundtrip",
+                "variables": [
+                    {
+                        "name": "minTimeForCalendar",
+                        "value": "{{formatDate(addHours(setHour(addDays(now; 1); 9); 0); \"YYYY-MM-DDTHH:mm:ssZ\")}}"
+                    },
+                    {
+                        "name": "maxTimeForCalendar",
+                        "value": "{{formatDate(setHour(addDays(now; 5); 17); \"YYYY-MM-DDTHH:mm:ssZ\")}}"
+                    }
+                ]
+            },
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 0
+                },
+                "restore": {
+                    "expect": {
+                        "scope": {
+                            "label": "One cycle"
+                        },
+                        "variables": {
+                            "items": [
+                                null,
+                                null
+                            ]
+                        }
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "variables",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Variable name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "any",
+                                "label": "Variable value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Variables"
+                    },
+                    {
+                        "name": "scope",
+                        "type": "select",
+                        "label": "Variable lifetime",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "roundtrip",
+                                "execution"
+                            ]
+                        }
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "minTimeForCalendar",
+                        "type": "any",
+                        "label": "minTimeForCalendar"
+                    },
+                    {
+                        "name": "maxTimeForCalendar",
+                        "type": "any",
+                        "label": "maxTimeForCalendar"
+                    }
+                ],
+                "advanced": true
+            }
+        },
+        {
+            "id": 2,
+            "module": "google-calendar:getFreeBusyInformation",
+            "version": 5,
+            "parameters": {
+                "__IMTCONN__": 2625482
+            },
+            "mapper": {
+                "item": [
+                    {
+                        "id": "nate.shelly@vitoautomation.com"
+                    }
+                ],
+                "timeMax": "{{9.maxTimeForCalendar}}",
+                "timeMin": "{{9.minTimeForCalendar}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 600,
+                    "y": 0
+                },
+                "restore": {
+                    "expect": {
+                        "item": {
+                            "mode": "chose",
+                            "items": [
+                                {
+                                    "id": {
+                                        "mode": "chose",
+                                        "label": "nate.shelly@vitoautomation.com (Primary Calendar)"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google"
+                            },
+                            "label": "My Google Vito Automation connection (nate.shelly@vitoautomation.com)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "timeMin",
+                        "time": true,
+                        "type": "date",
+                        "label": "Minimum Time",
+                        "required": true
+                    },
+                    {
+                        "name": "timeMax",
+                        "time": true,
+                        "type": "date",
+                        "label": "Maximum Time",
+                        "required": true
+                    },
+                    {
+                        "name": "item",
+                        "spec": [
+                            {
+                                "mode": "edit",
+                                "name": "id",
+                                "type": "select",
+                                "label": "Calendar ID",
+                                "dynamic": true,
+                                "options": [],
+                                "required": true
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Calendars",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 6,
+            "module": "onesaas:codejavascript",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 4369617
+            },
+            "mapper": {
+                "jsCode": "// Make sure these input parameters are mapped correctly from previous modules:\n// busy: from Google Calendar (e.g., {{2.calendars}})\n// startDateStr: from Google Calendar (e.g., {{2.timeMin}}) - Renamed from startDate to startDateStr for clarity\n// endDateStr: from Google Calendar (e.g., {{2.timeMax}}) - Renamed from endDate to endDateStr for clarity\n// senderEmail: from Webhooks (e.g., {{8.sender_email}})\n// senderName: from Webhooks (e.g., {{8.sender_name}})\n\nconst busyPeriods = busy || []; // Should now be populated correctly\nconst initialStartDate = new Date(startDateStr);\nconst initialEndDate = new Date(endDateStr);\nconst email = senderEmail; // Using 'email' to avoid conflict with 'senderEmail' input key\nlet fullSenderName = senderName || '';\n\nlet firstName = 'Valued Prospect';\n\nif (fullSenderName) {\n    const nameParts = fullSenderName.split(' ');\n    if (nameParts.length > 0 && nameParts[0].trim() !== '') {\n        firstName = nameParts[0].trim();\n    }\n}\n\nconst availableSlots = [];\nconst meetingDurationMinutes = 15;\nconst daysToLookAhead = 5; // Still iterate for 5 days in calculation logic\n\nfunction addMinutes(date, minutes) {\n    return new Date(date.getTime() + minutes * 60000);\n}\n\nconst now = new Date(); // Keep 'now' for comparison logic (past/future slots)\nconst isAfter5PMEDT = now.getHours() >= 17;\n\nfor (let i = 0; i < daysToLookAhead; i++) {\n    let currentDate = new Date(now);\n    currentDate.setDate(now.getDate() + i);\n    currentDate.setHours(9, 0, 0, 0);\n\n    if (i === 1 && isAfter5PMEDT) {\n        currentDate.setHours(13, 0, 0, 0);\n    } else if (i === 0 && now.getDate() === currentDate.getDate()) {\n        const minStartTimeToday = addMinutes(now, 60);\n        if (currentDate < minStartTimeToday) {\n            currentDate = minStartTimeToday;\n        }\n    }\n\n    if (currentDate > initialEndDate) { // Check against the endDate from Google Calendar input\n        continue;\n    }\n\n    for (let hour = currentDate.getHours(); hour < 17; hour++) {\n        for (let minute = 0; minute < 60; minute += meetingDurationMinutes) {\n            const slotStart = new Date(currentDate);\n            slotStart.setHours(hour, minute, 0, 0);\n\n            const slotEnd = addMinutes(slotStart, meetingDurationMinutes);\n\n            if (slotEnd < now) continue;\n            if (slotEnd > initialEndDate) continue; // Check against the endDate from Google Calendar input\n\n            let isBusy = false;\n            for (const calendar of busyPeriods) {\n                if (calendar.busy) {\n                    for (const busyPeriod of calendar.busy) {\n                        const busyStart = new Date(busyPeriod.start);\n                        const busyEnd = new Date(busyPeriod.end);\n\n                        if (slotStart < busyEnd && slotEnd > busyStart) {\n                            isBusy = true;\n                            break;\n                        }\n                    }\n                }\n                if (isBusy) break;\n            }\n\n            if (!isBusy) {\n                availableSlots.push({\n                    start: slotStart.toISOString(),\n                    display: slotStart.toLocaleDateString('en-US', {\n                        weekday: 'long',\n                        month: 'long',\n                        day: 'numeric',\n                        year: 'numeric',\n                        hour: 'numeric',\n                        minute: '2-digit',\n                        timeZoneName: 'short'\n                    })\n                });\n            }\n        }\n    }\n}\n\nreturn {\n    availableSlots: availableSlots,\n    senderEmail: email, // Use 'email'\n    senderName: firstName\n};",
+                "otherInputParameters": [
+                    {
+                        "key": "busy",
+                        "value": "{{2.calendars.`nate.shelly@vitoautomation.com`.busy}}"
+                    },
+                    {
+                        "key": "startDate",
+                        "value": "{{2.timeMin}}"
+                    },
+                    {
+                        "key": "endDate",
+                        "value": "{{2.timeMax}}"
+                    },
+                    {
+                        "key": "senderEmail"
+                    },
+                    {
+                        "key": "senderName"
+                    }
+                ]
+            },
+            "metadata": {
+                "designer": {
+                    "x": 900,
+                    "y": 0
+                },
+                "restore": {
+                    "expect": {
+                        "otherInputParameters": {
+                            "mode": "chose",
+                            "items": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "onesaas2"
+                            },
+                            "label": "My 0-CodeKit connection"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:onesaas2",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "otherInputParameters",
+                        "spec": [
+                            {
+                                "name": "key",
+                                "type": "text",
+                                "label": "Key"
+                            },
+                            {
+                                "name": "value",
+                                "type": "any",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Other Input Parameters"
+                    },
+                    {
+                        "name": "jsCode",
+                        "type": "text",
+                        "label": "Your JavaScript code",
+                        "required": true
+                    }
+                ],
+                "advanced": true
+            }
+        },
+        {
+            "id": 7,
+            "module": "gateway:WebhookRespond",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "body": "{\n  \"status\": \"success\",\n  \"message\": \"Available slots retrieved.\",\n  \"available_slots\": \"{{6.availableSlots}}\", // Map from 0CodeKit output\n  \"sender_email\": \"{{6.senderEmail}}\",       // Map from 0CodeKit output\n  \"sender_name\": \"{{6.senderName}}\"         // Map from 0CodeKit output\n}",
+                "status": "200",
+                "headers": []
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1248,
+                    "y": 2
+                },
+                "restore": {
+                    "expect": {
+                        "headers": {
+                            "mode": "chose"
+                        }
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "status",
+                        "type": "uinteger",
+                        "label": "Status",
+                        "required": true,
+                        "validate": {
+                            "min": 100
+                        }
+                    },
+                    {
+                        "name": "body",
+                        "type": "any",
+                        "label": "Body"
+                    },
+                    {
+                        "name": "headers",
+                        "spec": [
+                            {
+                                "name": "key",
+                                "type": "text",
+                                "label": "Key",
+                                "required": true,
+                                "validate": {
+                                    "max": 256
+                                }
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value",
+                                "required": true,
+                                "validate": {
+                                    "max": 4096
+                                }
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Custom headers",
+                        "validate": {
+                            "maxItems": 16
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us1.make.com",
+        "notes": []
+    }
+}

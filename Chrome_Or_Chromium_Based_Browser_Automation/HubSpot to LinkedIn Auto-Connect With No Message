@@ -1,0 +1,183 @@
+{
+    "name": "HubSpot to LinkedIn Auto-Connect With No Message",
+    "flow": [
+        {
+            "id": 2,
+            "module": "hubspotcrm:getContact",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 1912907
+            },
+            "mapper": {
+                "contactId": "{ID}",
+                "parseCustomFields": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": -141,
+                    "y": 3,
+                    "name": "Fetch HubSpot Contact Data"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "My HubSpot CRM connection (contact@justvito.io)",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "hubspotcrm"
+                            }
+                        }
+                    },
+                    "expect": {
+                        "contactId": {
+                            "mode": "edit"
+                        },
+                        "outputProperties": {
+                            "mode": "chose"
+                        },
+                        "parseCustomFields": {
+                            "mode": "chose"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:hubspotcrm",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "contactId",
+                        "type": "select",
+                        "label": "Contact ID",
+                        "required": true
+                    },
+                    {
+                        "name": "outputProperties",
+                        "type": "select",
+                        "label": "Output Properties",
+                        "multiple": true
+                    },
+                    {
+                        "name": "parseCustomFields",
+                        "type": "boolean",
+                        "label": "Parse Custom Fields",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "custom-js:runPuppeteer",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 4076083,
+                "returnValueType": "binary"
+            },
+            "mapper": {
+                "code": "module.exports = async ({ page, data }) => {\n    const url = '{personal_linked_in_url_in_https_format}';  // LinkedIn profile URL\n\n    // Go to the LinkedIn profile\n    await page.goto(url, { waitUntil: 'networkidle2' });\n\n    // Optional: Debug screenshot\n    await page.screenshot({ path: '/tmp/debug_screenshot.png' });\n\n    // Try clicking the \"Connect\" button directly\n    let connectClicked = false;\n    try {\n        await page.waitForSelector('button[aria-label*=\"Connect\"], button[aria-label=\"Invite\"]', { visible: true, timeout: 5000 });\n        await page.click('button[aria-label*=\"Connect\"], button[aria-label=\"Invite\"]');\n        connectClicked = true;\n    } catch (error) {\n        console.warn(`⚠️ \"Connect\" button not found directly. Trying fallback through \"More\" button...`);\n    }\n\n    // If \"Connect\" button not found, try through the \"More actions\" menu\n    if (!connectClicked) {\n        try {\n            await page.waitForSelector('button[aria-label=\"More actions\"]', { visible: true, timeout: 5000 });\n            await page.click('button[aria-label=\"More actions\"]');\n\n            await page.waitForSelector('div[role=\"menuitem\"]:has-text(\"Connect\")', { visible: true, timeout: 5000 });\n            await page.click('div[role=\"menuitem\"]:has-text(\"Connect\")');\n        } catch (error) {\n            throw new Error(`❌ Could not find \"Connect\" option on the profile: ${url}`);\n        }\n    }\n\n    // Confirm the connection (without message)\n    try {\n        await page.waitForSelector('button[aria-label=\"Send now\"], button[aria-label=\"Send invitation\"]', { visible: true, timeout: 5000 });\n        await page.click('button[aria-label=\"Send now\"], button[aria-label=\"Send invitation\"]');\n    } catch (error) {\n        throw new Error(`❌ \"Send invitation\" button not found on the profile: ${url}`);\n    }\n\n    return { message: `✅ Connection request sent successfully (no message) to ${url}` };\n};\n​"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 241,
+                    "y": 10,
+                    "name": "Auto-Send LinkedIn Connect (No Message) Custom JS"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "My Custom JS V2 connection",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "custom-js2"
+                            }
+                        },
+                        "returnValueType": {
+                            "label": "Screenshot (PNG)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:custom-js2",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "returnValueType",
+                        "type": "select",
+                        "label": "Return Type",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "text",
+                                "binary"
+                            ]
+                        }
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "code",
+                        "type": "text",
+                        "label": "Puppeteer Commands."
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "output",
+                        "type": "binary",
+                        "label": "Output"
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us1.make.com",
+        "notes": [
+            {
+                "moduleIds": [
+                    2
+                ],
+                "content": "<p><strong>Use a different CRM?</strong> Replace this module with your CRM's node.</p><p></p><p><strong>Need help?</strong> Ping <a href=\"https://Need help? Ping Nate Shelly on LinkedIn\" target=\"_blank\">Nate Shelly</a></p>",
+                "isFilterNote": false,
+                "metadata": {
+                    "color": "#9138FE"
+                }
+            },
+            {
+                "moduleIds": [
+                    4
+                ],
+                "content": "<p><strong>What does this JavaScript do? </strong></p><p></p><p><strong>Automates a LinkedIn connection request using a headless browser.</strong></p><ul><li>Visits a profile URL in a browser session</li><li>Clicks \"Connect\" or uses the “More actions” fallback if needed</li><li>Sends the invite without a message</li><li>Takes a debug screenshot before interaction</li><li>Throws errors if any step fails</li></ul><p></p><p>Requires a browser automation runtime (e.g., headless Chrome)</p><p></p><p><strong>Notes</strong></p><p>Replace <strong>{personal_linked_in_url_in_https_format}</strong> with the dynamic Personal LinkedIn URL in https:// format.</p><p></p><p><strong>Want a different action?</strong> Replace your<strong> </strong>JavaScript code<strong> </strong>inside this module. Want to inject logic, scrape data, or trigger browser behavior? Drop it in here.</p><p></p><p><strong>Need help?</strong> Ping <a href=\"https://#\" target=\"_blank\">Nate Shelly</a></p>",
+                "isFilterNote": false,
+                "metadata": {
+                    "color": "#9138FE"
+                }
+            }
+        ]
+    }
+}

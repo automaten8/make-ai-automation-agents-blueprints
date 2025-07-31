@@ -1,146 +1,103 @@
-# 💡 Make AI Automation Agents & Blueprints
+### **Make AI Automation Agents & Blueprints**
 
-This repository contains a curated library of **AI-first agents and automation workflow blueprints**, designed in [Make](https://www.make.com). Each folder represents a full automation use case — from browser-based automation to outbound prospecting, inbound lead response, meeting scheduling, and internal onboarding synced to knowledge bases.
+**An AI-first library of modular, production-ready automation blueprints built in Make.com.**
 
-Every scenario is modular, customizable, and production-ready — allowing you to deploy scalable, intelligent workflows without starting from scratch.
+This repository is your go-to resource for **powerful, AI-first automation agents and workflow blueprints** designed to save you time and supercharge your business processes. Each folder contains a complete, customizable automation scenario, ready to be deployed in your own Make.com account.
 
----
-
-## 🧠 What’s Inside
-
-- ✅ **Autonomous agents** that qualify leads, send emails, scrape data, and book meetings  
-- 🔁 **Reusable sub-scenarios** like `get_available_time_slots` and `book_meeting`  
-- 🧩 **Dynamic logic + GPT-4** for classification, personalization, and routing  
-- 🔗 **Integrations** with Gmail, Google Calendar, Airtable, Sheets, Notion, and 3rd-party APIs  
+From intelligent outbound outreach and dynamic CRM enrichment to automated internal tools, these blueprints put AI at the core of your operations.
 
 ---
 
-## 📁 Folder Structure
+### **Key Features**
 
-Each folder below contains `.json` blueprints (Make scenarios), reusable sub-modules, and notes.
-
----
-
-### `Browser_Automation_Agent/`  
-Headless browser automation agent that runs dynamic actions such as profile visits, scraping, clicks, and in-browser flows.
-
-**Includes:**
-- `Open_LinkedIn_Profile.json`  
-  - Opens a LinkedIn profile from a given URL to register a page visit  
-- `Click_Button_By_Text.json`  
-  - Simulates a browser click on a button with matching visible text  
-- `Extract_Profile_Data.json`  
-  - Extracts HTML or DOM data from a visited page  
-- `Send_LinkedIn_DM.json`  
-  - Inputs text into LinkedIn's DM field and clicks send  
+* **Autonomous Agents:** Deploy intelligent agents that can qualify leads, send personalized emails, visit profiles, and respond with dynamic, contextual awareness.
+* **Modular & Reusable Components:** Leverage pre-built, reusable modules like `book_meeting` and `get_available_calendar_slots` to accelerate your own automation development.
+* **Dynamic Decision Logic:** Harness the power of GPT-4 for real-time classification, data enrichment, and hyper-personalized messaging.
+* **Seamless Integrations:** Connect effortlessly with popular platforms including Gmail, Google Calendar, HubSpot, Salesforce, LinkedIn, and various external APIs.
 
 ---
 
-### `B2B_AI_Prospecting_Agent/`  
-Outbound AI sales engine that generates personalized emails, handles responses, and routes leads based on context.
+### **Folder Structure & Use Cases**
 
-**Includes:**
-- `Engagement_1_Generation.json`  
-  - Generates personalized cold emails based on persona, product, and research  
-- `Engagement_2_ResponseHandler.json`  
-  - Classifies replies and responds accordingly  
-- `Engagement_3_RoutingLogic.json`  
-  - Routes conversations to the correct follow-up path (e.g., book call, escalate, disqualify)  
+Each folder represents a comprehensive use case or a reusable utility. Inside, you'll find `.json` blueprint files, detailed implementation notes, and relevant sub-scenarios.
 
----
+**`Browser_Automation_Chrome_or_Chromium_Based/`**
 
-### `Inbound_Lead_Response_Agent/`  
-Automatically handles inbound leads from forms, email, or CRM and responds using GPT to qualify and guide.
+* **HubSpot to LinkedIn Auto-Connect with GPT4o Message:** Automatically connect with contacts and send personalized messages.
+* **HubSpot to LinkedIn Auto-Connect with No Message:** Automatically connect with contacts without sending a message.
 
-**Includes:**
-- `Inbound_Email_Listener.json`  
-  - Detects new lead events or emails to trigger response flow  
-- `Qualification_Sequence.json`  
-  - Uses GPT logic to ask tailored follow-up questions and score responses  
-- `Meeting_Booking_Sequence.json`  
-  - Sends meeting link or books time dynamically if the lead is qualified  
+**`Business_Estimate_Automation/`**
 
----
+* **Extract Revit Designs to Automate Business Estimates:** Streamline your estimation process by extracting key data from Revit designs.
 
-### `Calendar_Scheduling_Agent/`  
-Manages meeting availability, sends booking links, and schedules directly via Google Calendar.
+**`Deep_Research_CRM_Enrichment/`**
 
-**Includes:**
-- `get_available_time_slots.json`  
-  - Pulls open time slots from Google Calendar  
-- `book_meeting_with_availability.json`  
-  - Creates a Google Calendar invite using selected time  
-- `send_calendar_link.json`  
-  - Delivers a Calendly or Make-generated scheduling link to the contact  
+* **HubSpot CRM Deep Research Enrichment:** Enhance your HubSpot records with deep, AI-powered research.
+* **Salesforce CRM Deep Research Enrichment:** Enrich your Salesforce contacts and accounts with valuable external data.
+
+**`Employee_Onboarding_GPT_Agent_Sync/`**
+
+* **Part 1 (Form to Meeting Setup):** Automate the initial stages of employee onboarding, from form submission to meeting scheduling.
+* **Part 2 (Post-Meeting → Transcribe + Train GPT or Agent):** Post-meeting workflows that transcribe discussions and train an AI agent with the new information.
+
+**`Gmail_and_Email_Automation/`**
+
+* **Inbound SDR Agent:** A smart agent that handles and qualifies inbound leads via email.
+* **Outbound SDR Engagement (1, 2, 3):** A series of strategic outbound email campaigns for sales development representatives.
+* **HubSpot Deep Research Enrichment:** Enrich HubSpot contacts directly from email data.
+* **Salesforce CRM Deep Research Enrichment:** Enrich Salesforce contacts directly from email data.
+* **HubSpot to LinkedIn Auto-Connect with GPT4o Message:** Connect and message leads on LinkedIn after an email interaction.
+* **HubSpot to LinkedIn Auto-Connect with No Message:** Connect on LinkedIn silently after an email interaction.
 
 ---
 
-### `Agent_Tools/`  
-Support modules to be embedded in other agents for enrichment, notifications, or formatting.
+### **Reusable Tools**
 
-**Includes:**
-- `format_dates_to_ISO.json`  
-  - Normalizes date inputs for API compatibility  
-- `enrich_domain_data.json`  
-  - Pulls company/person data from Clearbit or similar APIs  
-- `slack_notify.json`  
-  - Sends formatted Slack alerts  
-- `lookup_knowledge_base.json`  
-  - Queries a GPT model or vector DB to fetch answers  
+These are standalone `.json` blueprints that can be imported into any of your Make scenarios.
+
+**`book_meeting/`**
+* `book_meeting.json`: Schedules a meeting based on provided time and context.
+
+**`get_available_calendar_slots/`**
+* `get_available_calendar_slots.json`: Fetches real-time calendar availability to avoid scheduling conflicts.
 
 ---
 
-### `Employee_Onboarding_Knowledge_Sync/`  
-Complete 2-part flow that handles onboarding—from form intake to post-meeting transcription + sync to knowledge base.
+### **How to Use**
 
-#### `Part_1_Form_to_Meeting/`  
-Automates the initial intake and meeting setup after a form is submitted.
-
-**Includes:**
-- `new_hire_intake_to_calendar.json`  
-  - Creates Airtable record, generates folder, assigns tasks, and schedules intro meeting  
-
-#### `Part_2_Post_Meeting_Sync/`  
-Runs after the onboarding meeting is complete.
-
-**Includes:**
-- `onboarding_meeting_to_knowledgebase.json`  
-  - Transcribes the meeting recording using GPT, summarizes, and syncs to Airtable or Notion  
+1.  **Clone or Download:** Get a copy of this repository to your local machine.
+2.  **Import to Make:** Log in to [Make.com](https://www.make.com), create a new scenario, and click **Import Blueprint**.
+3.  **Paste & Customize:** Paste the contents of your desired `.json` file.
+4.  **Configure:** Connect your apps (e.g., add your OpenAI key, Gmail account, HubSpot connection, etc.) and customize the modules to fit your specific needs.
 
 ---
 
-## 🚀 How to Use
+### **Requirements**
 
-1. Clone or download this repo  
-2. Go to [Make](https://www.make.com) and log in  
-3. Create a new scenario and click **Import Blueprint**  
-4. Paste contents of any `.json` file  
-5. Update modules with your credentials (OpenAI keys, Google Calendar, Airtable, Slack, etc.)  
-
----
-
-## 🧩 Requirements
-
-- Make.com account  
-- OpenAI API key (for GPT-based messaging and classification)  
-- Perplexity API key (for research-based personalization)  
-- API access for Gmail, Google Calendar, Airtable, Clearbit, Notion, Slack, etc.  
+* A [Make.com](https://www.make.com) account.
+* An OpenAI API key (for GPT-enhanced logic).
+* A Perplexity API key (for deep research modules).
+* Access to any third-party platforms you intend to connect (e.g., Gmail, Google Calendar, HubSpot, Salesforce).
 
 ---
 
-## 📣 Contribute
+### **Contribute**
 
-Have an automation or callable sub-agent to share?  
-Fork this repo, add your `.json` blueprints, and open a pull request.
-
----
-
-## 💬 Questions or Feedback?
-
-Message [Nate Shelly](https://www.linkedin.com/in/nate-shelly/) on LinkedIn or open an issue in this repo.
+We welcome contributions from the community! If you've created a useful automation, please:
+1.  **Fork this repo.**
+2.  **Add your `.json` scenario** to the most relevant folder.
+3.  **Open a pull request** with a clear description of your contribution.
 
 ---
 
-## ⚖️ License
+### **Get in Touch**
 
-MIT License — free to use, clone, and modify. Attribution appreciated.
+Have questions, feedback, or need assistance?
+* Message [Nate Shelly on LinkedIn](https://www.linkedin.com/in/nate-shelly/).
+* Open an issue in this repository.
+
+---
+
+### **License**
+
+This project is licensed under the **MIT License**. You are free to use, clone, and modify it. Attribution is greatly appreciated.

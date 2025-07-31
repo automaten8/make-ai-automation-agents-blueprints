@@ -1,6 +1,6 @@
 # 💡 Make AI Automation Agents & Blueprints
 
-This repository contains a curated library of **AI-first automation agents and workflow blueprints**, designed in [Make](https://www.make.com). Each folder represents a full automation use case — from browser-based automation to outbound prospecting, inbound lead response, meeting scheduling, and internal onboarding synced to knowledge bases.
+This repository contains a curated library of **AI-first agents and automation workflow blueprints**, designed in [Make](https://www.make.com). Each folder represents a full automation use case — from browser-based automation to outbound prospecting, inbound lead response, meeting scheduling, and internal onboarding synced to knowledge bases.
 
 Every scenario is modular, customizable, and production-ready — allowing you to deploy scalable, intelligent workflows without starting from scratch.
 

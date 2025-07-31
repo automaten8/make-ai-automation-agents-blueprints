@@ -1,0 +1,1014 @@
+{
+    "name": "Employee Onboarding GPT & Agent Sync - Part 2 (Post-Meeting → Transcribe + Train GPT or Agent)",
+    "flow": [
+        {
+            "id": 1,
+            "module": "airtable:TriggerWatchRecords",
+            "version": 3,
+            "parameters": {
+                "__IMTCONN__": 1792711,
+                "base": "appYxp059Lcn77aG6",
+                "useColumnId": true,
+                "table": "tblghVYvto5GoWIXw",
+                "config": {
+                    "triggerField": "User ID",
+                    "labelField": "User ID"
+                },
+                "maxRecords": 10,
+                "formula": ""
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": -242,
+                    "y": 5,
+                    "name": "Watch for Completed Onboarding Meeting"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "Vito AI (User ID: usr0s6xenHzpKqErc)",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "airtable3"
+                            }
+                        },
+                        "base": {
+                            "label": "AI-SDR"
+                        },
+                        "table": {
+                            "label": "Users-old"
+                        },
+                        "config": {
+                            "nested": {
+                                "triggerField": {
+                                    "label": "User ID"
+                                },
+                                "labelField": {
+                                    "label": "User ID"
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:airtable3,airtable2",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "base",
+                        "type": "select",
+                        "label": "Base",
+                        "required": true
+                    },
+                    {
+                        "name": "useColumnId",
+                        "type": "boolean",
+                        "label": "Use Column ID",
+                        "required": true
+                    },
+                    {
+                        "name": "table",
+                        "type": "select",
+                        "label": "Table",
+                        "required": true
+                    },
+                    {
+                        "name": "config",
+                        "type": "collection",
+                        "label": "Trigger configuration",
+                        "spec": [
+                            {
+                                "name": "triggerField",
+                                "type": "select",
+                                "label": "Trigger field",
+                                "required": true
+                            },
+                            {
+                                "name": "triggerField",
+                                "type": "hidden"
+                            },
+                            {
+                                "name": "labelField",
+                                "type": "select",
+                                "label": "Label field",
+                                "required": true
+                            }
+                        ]
+                    },
+                    {
+                        "name": "maxRecords",
+                        "type": "integer",
+                        "label": "Limit",
+                        "required": true
+                    },
+                    {
+                        "name": "view",
+                        "type": "select",
+                        "label": "View"
+                    },
+                    {
+                        "name": "formula",
+                        "type": "text",
+                        "label": "Formula"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "ID"
+                    },
+                    {
+                        "name": "createdTime",
+                        "type": "date",
+                        "label": "Created Time"
+                    },
+                    {
+                        "name": "fldOUM33qRCNly9GR",
+                        "label": "Name",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fld95wKoZPR7Zb03n",
+                        "label": "User Email",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldbaXErrPNzeHuTE",
+                        "label": "User ID",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldxz6prGrgeGxDkv",
+                        "label": "Password Hash",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldm5WG3b8HCyCIUV",
+                        "label": "Stripe Customer ID",
+                        "type": "number"
+                    },
+                    {
+                        "name": "fldYvpT32d0J4sATO",
+                        "label": "Created At",
+                        "type": "date"
+                    },
+                    {
+                        "name": "fld7s8wo7CZtQtwis",
+                        "label": "Status",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldzYRUWNOR20oj3p",
+                        "label": "Onboarding Completed",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "fldHJkFHSaF8CPuKQ",
+                        "label": "Subscription Plan",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldP8DWurCMzubY4h",
+                        "label": "Rate",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fld5dZwWEP8MgzCCO",
+                        "label": "Max Campaigns Allowed",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldBAGKAuWq6UoBA5",
+                        "label": "Max Emails Per Month",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldzIPrpyuJkfC5GF",
+                        "label": "Max Emails Per Day",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldSfLImVnh3nD7af",
+                        "label": "Total Emails Used",
+                        "type": "number"
+                    },
+                    {
+                        "name": "fldJd2k5d1shCmxEh",
+                        "label": "Last Modified Time",
+                        "type": "date"
+                    },
+                    {
+                        "name": "fldMgQYJ2wqYvNYKf",
+                        "label": "Company",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fld4QSeVit2tTGc2Z",
+                        "label": "Website",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldnEUyQpQQRi7st6",
+                        "label": "Personal LinkedIn",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fld19olpCHWsQ5xLI",
+                        "label": "Work Email",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldC6B8vUsiLYPDNe",
+                        "label": "Subscription Status",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldUCbWMFZTSyVA1G",
+                        "label": "Role",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldrAsQgyqM9ngXl7",
+                        "label": "Type",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldvvaRtfCJwHtJVZ",
+                        "label": "Email_Logs",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldBQBGQbvSAICjiJ",
+                        "label": "Email 1 Opens",
+                        "type": "array"
+                    },
+                    {
+                        "name": "fldBjpcrjZPflkSk7",
+                        "label": "Email 2 Sent",
+                        "type": "array"
+                    },
+                    {
+                        "name": "fldA4JaVoVK2vtwQe",
+                        "label": "Email 2 Opens",
+                        "type": "array"
+                    },
+                    {
+                        "name": "fldbrkiQXkcfZmZ6i",
+                        "label": "Email 3 Sent",
+                        "type": "array"
+                    },
+                    {
+                        "name": "fldFf0fGhoD5ySjCD",
+                        "label": "Email 3 Opens",
+                        "type": "array"
+                    },
+                    {
+                        "name": "fld2vWQpvDQXHRuuE",
+                        "label": "Stage",
+                        "type": "array"
+                    },
+                    {
+                        "name": "fldbHoDDpJa9fry3e",
+                        "label": "record_id",
+                        "type": "array"
+                    }
+                ],
+                "advanced": true
+            }
+        },
+        {
+            "id": 3,
+            "module": "google-drive:searchForFilesFolders",
+            "version": 4,
+            "parameters": {
+                "__IMTCONN__": 2625238
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 152,
+                    "y": 2,
+                    "name": "Search for Google Meet File from Google Drive"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "My Google Vito Automation connection (nate.shelly@vitoautomation.com)",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google-restricted"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google-restricted",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "google-drive:getAFile",
+            "version": 4,
+            "parameters": {
+                "__IMTCONN__": 2625238
+            },
+            "mapper": {
+                "select": "map",
+                "formatDocuments": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                "formatSpreadsheets": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "formatPresentations": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                "formatDrawings": "image/jpeg",
+                "file": "{{3.id}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 579,
+                    "y": -1,
+                    "name": "Download Google Meet File"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "My Google Vito Automation connection (nate.shelly@vitoautomation.com)",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google-restricted"
+                            }
+                        }
+                    },
+                    "expect": {
+                        "select": {
+                            "label": "Enter manually"
+                        },
+                        "formatDocuments": {
+                            "label": "MS Word Document"
+                        },
+                        "formatSpreadsheets": {
+                            "label": "MS Excel"
+                        },
+                        "formatPresentations": {
+                            "label": "MS PowerPoint"
+                        },
+                        "formatDrawings": {
+                            "label": "JPEG"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google-restricted",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "type": "hidden"
+                    },
+                    {
+                        "name": "select",
+                        "type": "select",
+                        "label": "Enter a File ID",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "map",
+                                "value"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "formatDocuments",
+                        "type": "select",
+                        "label": "Convert Google Documents Files to Format",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                                "application/pdf",
+                                "application/vnd.oasis.opendocument.text",
+                                "text/html",
+                                "text/plain",
+                                "application/rtf",
+                                "text/markdown"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "formatSpreadsheets",
+                        "type": "select",
+                        "label": "Convert Google Spreadsheets Files to Format",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                "application/x-vnd.oasis.opendocument.spreadsheet",
+                                "application/pdf",
+                                "text/csv"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "formatPresentations",
+                        "type": "select",
+                        "label": "Convert Google Slides Files to Format",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                                "application/pdf"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "formatDrawings",
+                        "type": "select",
+                        "label": "Convert Google Drawings Files to Format",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "image/jpeg",
+                                "image/png",
+                                "image/svg+xml",
+                                "application/pdf"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "file",
+                        "type": "text",
+                        "label": "File ID",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "module": "openai-gpt-3:CreateTranscription",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 1796128
+            },
+            "mapper": {
+                "fileName": "{{1.id}}",
+                "fileData": "{file_data}",
+                "model": "gpt-4o-transcribe",
+                "prompt": "Transcribe this meeting: {{1.fldOUM33qRCNly9GR}}",
+                "temperature": "1",
+                "logProbs": false
+            },
+            "metadata": {
+                "designer": {
+                    "x": 963,
+                    "y": -3,
+                    "name": "Transcribe & Summarize Meeting"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "My OpenAI connection",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "openai-gpt-3"
+                            }
+                        }
+                    },
+                    "expect": {
+                        "model": {
+                            "mode": "chose",
+                            "nested": [
+                                {
+                                    "help": "If chosen will return the log probabilities of the tokens in the response to understand the model's confidence in the transcription.",
+                                    "name": "logProbs",
+                                    "type": "boolean",
+                                    "label": "Include Log Probabilities",
+                                    "default": false,
+                                    "required": true
+                                }
+                            ],
+                            "label": "gpt-4o-transcribe (system)"
+                        },
+                        "logProbs": {
+                            "mode": "chose"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:openai-gpt-3",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "fileName",
+                        "type": "filename",
+                        "label": "File Name",
+                        "required": true
+                    },
+                    {
+                        "name": "fileData",
+                        "type": "buffer",
+                        "label": "File Data",
+                        "required": true
+                    },
+                    {
+                        "name": "model",
+                        "type": "select",
+                        "label": "Model",
+                        "required": true
+                    },
+                    {
+                        "name": "prompt",
+                        "type": "text",
+                        "label": "Prompt"
+                    },
+                    {
+                        "name": "temperature",
+                        "type": "number",
+                        "label": "Temperature",
+                        "validate": {
+                            "max": 1,
+                            "min": 0
+                        }
+                    },
+                    {
+                        "name": "language",
+                        "type": "text",
+                        "label": "Language"
+                    },
+                    {
+                        "name": "logProbs",
+                        "type": "boolean",
+                        "label": "Include Log Probabilities",
+                        "required": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "text",
+                        "type": "text",
+                        "label": "Text"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "module": "airtable:ActionUpdateRecords",
+            "version": 3,
+            "parameters": {
+                "__IMTCONN__": 1792711
+            },
+            "mapper": {
+                "base": "appYxp059Lcn77aG6",
+                "typecast": false,
+                "useColumnId": true,
+                "table": "tblghVYvto5GoWIXw",
+                "id": "{{4.id}}",
+                "record": {}
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1367,
+                    "y": -7,
+                    "name": "Store Summary in GPT or Knowledge Base"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "Vito AI (User ID: usr0s6xenHzpKqErc)",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "airtable3"
+                            }
+                        }
+                    },
+                    "expect": {
+                        "base": {
+                            "label": "AI-SDR"
+                        },
+                        "typecast": {
+                            "mode": "chose"
+                        },
+                        "useColumnId": {
+                            "mode": "chose"
+                        },
+                        "table": {
+                            "label": "Users-old"
+                        },
+                        "record": {
+                            "nested": {
+                                "fld7s8wo7CZtQtwis": {
+                                    "mode": "edit"
+                                },
+                                "fldzYRUWNOR20oj3p": {
+                                    "mode": "chose"
+                                },
+                                "fldHJkFHSaF8CPuKQ": {
+                                    "mode": "edit"
+                                },
+                                "fldC6B8vUsiLYPDNe": {
+                                    "mode": "edit"
+                                },
+                                "fldUCbWMFZTSyVA1G": {
+                                    "mode": "edit"
+                                },
+                                "fldrAsQgyqM9ngXl7": {
+                                    "mode": "edit"
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:airtable3,airtable2",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "base",
+                        "type": "select",
+                        "label": "Base",
+                        "required": true
+                    },
+                    {
+                        "name": "typecast",
+                        "type": "boolean",
+                        "label": "Smart links",
+                        "required": true
+                    },
+                    {
+                        "name": "useColumnId",
+                        "type": "boolean",
+                        "label": "Use Column ID",
+                        "required": true
+                    },
+                    {
+                        "name": "table",
+                        "type": "select",
+                        "label": "Table",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "Record ID",
+                        "required": true
+                    },
+                    {
+                        "name": "record",
+                        "type": "collection",
+                        "label": "Record",
+                        "spec": [
+                            {
+                                "name": "fldOUM33qRCNly9GR",
+                                "type": "text",
+                                "label": "Name"
+                            },
+                            {
+                                "name": "fld95wKoZPR7Zb03n",
+                                "type": "text",
+                                "label": "User Email"
+                            },
+                            {
+                                "name": "fldbaXErrPNzeHuTE",
+                                "type": "text",
+                                "label": "User ID"
+                            },
+                            {
+                                "name": "fldxz6prGrgeGxDkv",
+                                "type": "text",
+                                "label": "Password Hash"
+                            },
+                            {
+                                "name": "fldm5WG3b8HCyCIUV",
+                                "type": "number",
+                                "label": "Stripe Customer ID"
+                            },
+                            {
+                                "name": "fld7s8wo7CZtQtwis",
+                                "type": "select",
+                                "label": "Status",
+                                "mode": "edit"
+                            },
+                            {
+                                "name": "fldzYRUWNOR20oj3p",
+                                "type": "boolean",
+                                "label": "Onboarding Completed"
+                            },
+                            {
+                                "name": "fldHJkFHSaF8CPuKQ",
+                                "type": "select",
+                                "label": "Subscription Plan",
+                                "mode": "edit"
+                            },
+                            {
+                                "name": "fldSfLImVnh3nD7af",
+                                "type": "number",
+                                "label": "Total Emails Used"
+                            },
+                            {
+                                "name": "fldMgQYJ2wqYvNYKf",
+                                "type": "text",
+                                "label": "Company"
+                            },
+                            {
+                                "name": "fld4QSeVit2tTGc2Z",
+                                "type": "text",
+                                "label": "Website"
+                            },
+                            {
+                                "name": "fldnEUyQpQQRi7st6",
+                                "type": "text",
+                                "label": "Personal LinkedIn"
+                            },
+                            {
+                                "name": "fld19olpCHWsQ5xLI",
+                                "type": "text",
+                                "label": "Work Email"
+                            },
+                            {
+                                "name": "fldC6B8vUsiLYPDNe",
+                                "type": "select",
+                                "label": "Subscription Status",
+                                "mode": "edit"
+                            },
+                            {
+                                "name": "fldUCbWMFZTSyVA1G",
+                                "type": "select",
+                                "label": "Role",
+                                "mode": "edit"
+                            },
+                            {
+                                "name": "fldrAsQgyqM9ngXl7",
+                                "type": "select",
+                                "label": "Type",
+                                "mode": "edit"
+                            },
+                            {
+                                "name": "fldvvaRtfCJwHtJVZ",
+                                "type": "text",
+                                "label": "Email_Logs"
+                            }
+                        ]
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "ID"
+                    },
+                    {
+                        "name": "createdTime",
+                        "type": "date",
+                        "label": "Created Time"
+                    },
+                    {
+                        "name": "fldOUM33qRCNly9GR",
+                        "label": "Name",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fld95wKoZPR7Zb03n",
+                        "label": "User Email",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldbaXErrPNzeHuTE",
+                        "label": "User ID",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldxz6prGrgeGxDkv",
+                        "label": "Password Hash",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldm5WG3b8HCyCIUV",
+                        "label": "Stripe Customer ID",
+                        "type": "number"
+                    },
+                    {
+                        "name": "fldYvpT32d0J4sATO",
+                        "label": "Created At",
+                        "type": "date"
+                    },
+                    {
+                        "name": "fld7s8wo7CZtQtwis",
+                        "label": "Status",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldzYRUWNOR20oj3p",
+                        "label": "Onboarding Completed",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "fldHJkFHSaF8CPuKQ",
+                        "label": "Subscription Plan",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldP8DWurCMzubY4h",
+                        "label": "Rate",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fld5dZwWEP8MgzCCO",
+                        "label": "Max Campaigns Allowed",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldBAGKAuWq6UoBA5",
+                        "label": "Max Emails Per Month",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldzIPrpyuJkfC5GF",
+                        "label": "Max Emails Per Day",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldSfLImVnh3nD7af",
+                        "label": "Total Emails Used",
+                        "type": "number"
+                    },
+                    {
+                        "name": "fldJd2k5d1shCmxEh",
+                        "label": "Last Modified Time",
+                        "type": "date"
+                    },
+                    {
+                        "name": "fldMgQYJ2wqYvNYKf",
+                        "label": "Company",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fld4QSeVit2tTGc2Z",
+                        "label": "Website",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldnEUyQpQQRi7st6",
+                        "label": "Personal LinkedIn",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fld19olpCHWsQ5xLI",
+                        "label": "Work Email",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldC6B8vUsiLYPDNe",
+                        "label": "Subscription Status",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldUCbWMFZTSyVA1G",
+                        "label": "Role",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldrAsQgyqM9ngXl7",
+                        "label": "Type",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldvvaRtfCJwHtJVZ",
+                        "label": "Email_Logs",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldBQBGQbvSAICjiJ",
+                        "label": "Email 1 Opens",
+                        "type": "array"
+                    },
+                    {
+                        "name": "fldBjpcrjZPflkSk7",
+                        "label": "Email 2 Sent",
+                        "type": "array"
+                    },
+                    {
+                        "name": "fldA4JaVoVK2vtwQe",
+                        "label": "Email 2 Opens",
+                        "type": "array"
+                    },
+                    {
+                        "name": "fldbrkiQXkcfZmZ6i",
+                        "label": "Email 3 Sent",
+                        "type": "array"
+                    },
+                    {
+                        "name": "fldFf0fGhoD5ySjCD",
+                        "label": "Email 3 Opens",
+                        "type": "array"
+                    },
+                    {
+                        "name": "fld2vWQpvDQXHRuuE",
+                        "label": "Stage",
+                        "type": "array"
+                    },
+                    {
+                        "name": "fldbHoDDpJa9fry3e",
+                        "label": "record_id",
+                        "type": "array"
+                    }
+                ],
+                "advanced": true
+            }
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us1.make.com",
+        "notes": [
+            {
+                "moduleIds": [
+                    1
+                ],
+                "content": "<p>Watches the Airtable base for records where the onboarding meeting has been marked as completed (e.g., via a status field or timestamp). Once detected, this triggers the post-meeting automation flow.</p><p></p><p><strong>Replace this module as needed to match your stack.</strong></p><p></p><p>Need help? Ping <a href=\"https://Need help? Ping Nate Shelly on LinkedIn\" target=\"_blank\">Nate Shelly</a></p>",
+                "isFilterNote": false,
+                "metadata": {
+                    "color": "#9138FE"
+                }
+            },
+            {
+                "moduleIds": [
+                    3
+                ],
+                "content": "<p>Searches Google Drive for the meeting recording file using metadata (e.g., filename, folder, or attendee email). This file is used as the source for transcription in the next step.</p><p></p><p><strong>Replace this module as needed to match your stack.</strong></p><p></p><p>Need help? Ping <a href=\"https://Need help? Ping Nate Shelly on LinkedIn\" target=\"_blank\">Nate Shelly</a></p>",
+                "isFilterNote": false,
+                "metadata": {
+                    "color": "#9138FE"
+                }
+            },
+            {
+                "moduleIds": [
+                    4
+                ],
+                "content": "<p>Downloads the identified recording file from Google Drive so it can be passed into the transcription step. This module handles the file transfer for audio or video content.</p><p></p><p><strong>Replace this module as needed to match your stack.</strong></p><p></p><p>Need help? Ping <a href=\"https://Need help? Ping Nate Shelly on LinkedIn\" target=\"_blank\">Nate Shelly</a></p>",
+                "isFilterNote": false,
+                "metadata": {
+                    "color": "#9138FE"
+                }
+            },
+            {
+                "moduleIds": [
+                    2
+                ],
+                "content": "<p>Uses GPT or Whisper to transcribe and summarize the meeting content. The summary focuses on essential questions, answers, or insights from the onboarding conversation.</p><p></p><p><strong>Replace this module as needed to match your stack.</strong></p><p></p><p>Need help? Ping <a href=\"https://Need help? Ping Nate Shelly on LinkedIn\" target=\"_blank\">Nate Shelly</a></p>",
+                "isFilterNote": false,
+                "metadata": {
+                    "color": "#9138FE"
+                }
+            },
+            {
+                "moduleIds": [
+                    5
+                ],
+                "content": "<p>Updates the Airtable knowledgebase or learning table with the new meeting summary. This enables your internal GPT or agent to reference recent onboarding Q&amp;A over time.</p><p></p><p><strong>Replace this module as needed to match your stack.</strong></p><p></p><p>Need help? Ping <a href=\"https://Need help? Ping Nate Shelly on LinkedIn\" target=\"_blank\">Nate Shelly</a></p>",
+                "isFilterNote": false,
+                "metadata": {
+                    "color": "#9138FE"
+                }
+            }
+        ]
+    }
+}

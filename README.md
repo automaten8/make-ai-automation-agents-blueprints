@@ -25,7 +25,7 @@ Each folder below contains `.json` blueprints (Make scenarios), reusable sub-mod
 Headless browser automation agent that runs dynamic actions such as profile visits, scraping, clicks, and in-browser flows.
 
 **Includes:**
-- `Open_Linkedin_Profile.json`  
+- `Open_LinkedIn_Profile.json`  
   - Opens a LinkedIn profile from a given URL to register a page visit  
 - `Click_Button_By_Text.json`  
   - Simulates a browser click on a button with matching visible text  

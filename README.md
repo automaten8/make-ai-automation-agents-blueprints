@@ -1,121 +1,146 @@
 # 💡 Make AI Automation Agents & Blueprints
 
-This repository contains a growing library of **modular, AI-first automation agents and scenario blueprints** built in [Make](https://www.make.com). Each folder delivers a complete automation use case — from outbound prospecting and inbound lead response, to calendar scheduling and internal onboarding workflows with AI-assisted documentation.
+This repository contains a curated library of **AI-first automation agents and workflow blueprints**, designed in [Make](https://www.make.com). Each folder represents a full automation use case — from browser-based automation to outbound prospecting, inbound lead response, meeting scheduling, and internal onboarding synced to knowledge bases.
 
-These scenarios are designed to be cloned, customized, and extended for real-world business applications — enabling you to scale operations, reduce manual workload, and build a lean, high-output system with AI at the core.
+Every scenario is modular, customizable, and production-ready — allowing you to deploy scalable, intelligent workflows without starting from scratch.
 
 ---
 
 ## 🧠 What’s Inside
 
-- ✅ **Autonomous agents** that qualify leads, schedule meetings, and handle multi-step logic  
+- ✅ **Autonomous agents** that qualify leads, send emails, scrape data, and book meetings  
 - 🔁 **Reusable sub-scenarios** like `get_available_time_slots` and `book_meeting`  
-- 🧩 **Conditional logic + OpenAI GPT-4** for personalized messaging and classification  
-- 🔗 **Integrations** with Gmail, Google Calendar, Airtable, Sheets, and HTTP APIs  
+- 🧩 **Dynamic logic + GPT-4** for classification, personalization, and routing  
+- 🔗 **Integrations** with Gmail, Google Calendar, Airtable, Sheets, Notion, and 3rd-party APIs  
 
 ---
 
 ## 📁 Folder Structure
 
-Each folder represents a complete automation use case.  
-Inside each is one or more `.json` blueprints, reusable tools, and implementation notes.
+Each folder below contains `.json` blueprints (Make scenarios), reusable sub-modules, and notes.
+
+---
+
+### `Browser_Automation_Agent/`  
+Headless browser automation agent that runs dynamic actions such as profile visits, scraping, clicks, and in-browser flows.
+
+**Includes:**
+- `Open_Linkedin_Profile.json`  
+  - Opens a LinkedIn profile from a given URL to register a page visit  
+- `Click_Button_By_Text.json`  
+  - Simulates a browser click on a button with matching visible text  
+- `Extract_Profile_Data.json`  
+  - Extracts HTML or DOM data from a visited page  
+- `Send_LinkedIn_DM.json`  
+  - Inputs text into LinkedIn's DM field and clicks send  
 
 ---
 
 ### `B2B_AI_Prospecting_Agent/`  
-Outbound cold email engine that uses AI to research, personalize, respond, and route prospect engagement.
+Outbound AI sales engine that generates personalized emails, handles responses, and routes leads based on context.
 
 **Includes:**
-- `Engagement_1_Generation.json` — Generates personalized cold emails based on persona, product, and web research  
-- `Engagement_2_ResponseHandler.json` — Detects replies and responds with intelligent follow-up or booking logic  
-- `Engagement_3_RoutingLogic.json` — Routes replies to different flows based on message intent or metadata  
+- `Engagement_1_Generation.json`  
+  - Generates personalized cold emails based on persona, product, and research  
+- `Engagement_2_ResponseHandler.json`  
+  - Classifies replies and responds accordingly  
+- `Engagement_3_RoutingLogic.json`  
+  - Routes conversations to the correct follow-up path (e.g., book call, escalate, disqualify)  
 
 ---
 
 ### `Inbound_Lead_Response_Agent/`  
-Responds to inbound leads (via form fill, email, webhook) to qualify, ask questions, and drive toward meetings.
+Automatically handles inbound leads from forms, email, or CRM and responds using GPT to qualify and guide.
 
 **Includes:**
-- `Inbound_Email_Listener.json` — Triggers automation from form submissions or CRM events  
-- `Qualification_Sequence.json` — Uses GPT to ask relevant follow-up questions and collect lead data  
-- `Meeting_Booking_Sequence.json` — Schedules meeting dynamically based on intent and availability  
+- `Inbound_Email_Listener.json`  
+  - Detects new lead events or emails to trigger response flow  
+- `Qualification_Sequence.json`  
+  - Uses GPT logic to ask tailored follow-up questions and score responses  
+- `Meeting_Booking_Sequence.json`  
+  - Sends meeting link or books time dynamically if the lead is qualified  
 
 ---
 
 ### `Calendar_Scheduling_Agent/`  
-Handles meeting logistics, availability checks, and scheduling workflows through Google Calendar.
+Manages meeting availability, sends booking links, and schedules directly via Google Calendar.
 
 **Includes:**
-- `get_available_time_slots.json` — Pulls real-time availability from Google Calendar  
-- `book_meeting_with_availability.json` — Books a meeting using chosen time slot  
-- `send_calendar_link.json` — Sends dynamic scheduling links via email or chatbot  
+- `get_available_time_slots.json`  
+  - Pulls open time slots from Google Calendar  
+- `book_meeting_with_availability.json`  
+  - Creates a Google Calendar invite using selected time  
+- `send_calendar_link.json`  
+  - Delivers a Calendly or Make-generated scheduling link to the contact  
 
 ---
 
 ### `Agent_Tools/`  
-Reusable modules that support or extend other agents. Meant to be embedded, cloned, or reused.
+Support modules to be embedded in other agents for enrichment, notifications, or formatting.
 
 **Includes:**
-- `format_dates_to_ISO.json` — Converts date strings to ISO for cross-platform compatibility  
-- `enrich_domain_data.json` — Enriches lead/company data using APIs like Clearbit  
-- `slack_notify.json` — Sends Slack alerts with optional conditional formatting  
-- `lookup_knowledge_base.json` — Queries vectorized knowledge base or GPT to fetch structured answers  
+- `format_dates_to_ISO.json`  
+  - Normalizes date inputs for API compatibility  
+- `enrich_domain_data.json`  
+  - Pulls company/person data from Clearbit or similar APIs  
+- `slack_notify.json`  
+  - Sends formatted Slack alerts  
+- `lookup_knowledge_base.json`  
+  - Queries a GPT model or vector DB to fetch answers  
 
 ---
 
 ### `Employee_Onboarding_Knowledge_Sync/`  
-Two-part automation that transforms onboarding into a streamlined, AI-assisted process — from intake to knowledge capture.
+Complete 2-part flow that handles onboarding—from form intake to post-meeting transcription + sync to knowledge base.
 
----
-
-#### 📂 `Part_1_Form_to_Meeting/`  
-Automates the post-form intake flow and meeting setup for new hires.
+#### `Part_1_Form_to_Meeting/`  
+Automates the initial intake and meeting setup after a form is submitted.
 
 **Includes:**
-- `new_hire_intake_to_calendar.json` — Creates Airtable record, assigns checklist, creates folders, schedules intro meeting, and alerts team  
+- `new_hire_intake_to_calendar.json`  
+  - Creates Airtable record, generates folder, assigns tasks, and schedules intro meeting  
 
----
-
-#### 📂 `Part_2_Post_Meeting_Sync/`  
-Triggers once onboarding meetings conclude to transcribe and sync learnings into your knowledge base.
+#### `Part_2_Post_Meeting_Sync/`  
+Runs after the onboarding meeting is complete.
 
 **Includes:**
-- `onboarding_meeting_to_knowledgebase.json` — Transcribes meeting recording with GPT, summarizes notes, and syncs to Airtable or Notion  
+- `onboarding_meeting_to_knowledgebase.json`  
+  - Transcribes the meeting recording using GPT, summarizes, and syncs to Airtable or Notion  
 
 ---
 
 ## 🚀 How to Use
 
 1. Clone or download this repo  
-2. Log into [Make.com](https://www.make.com)  
+2. Go to [Make](https://www.make.com) and log in  
 3. Create a new scenario and click **Import Blueprint**  
-4. Paste contents of any `.json` file from the folder of your choice  
-5. Customize modules (e.g., OpenAI keys, Gmail integration, Airtable tokens, etc.)  
+4. Paste contents of any `.json` file  
+5. Update modules with your credentials (OpenAI keys, Google Calendar, Airtable, Slack, etc.)  
 
 ---
 
 ## 🧩 Requirements
 
-- A [Make](https://www.make.com) account  
-- OpenAI API key (for GPT-powered modules)  
+- Make.com account  
+- OpenAI API key (for GPT-based messaging and classification)  
 - Perplexity API key (for research-based personalization)  
-- Any additional API access depending on your stack (e.g., Gmail, Google Calendar, Clearbit, Apify, Notion, CRM, etc.)  
+- API access for Gmail, Google Calendar, Airtable, Clearbit, Notion, Slack, etc.  
 
 ---
 
 ## 📣 Contribute
 
-Have a scenario to share?  
-Fork this repo and open a pull request — we welcome battle-tested agents and modular blueprints.
+Have an automation or callable sub-agent to share?  
+Fork this repo, add your `.json` blueprints, and open a pull request.
 
 ---
 
 ## 💬 Questions or Feedback?
 
-Connect with [Nate Shelly on LinkedIn](https://www.linkedin.com/in/nate-shelly/) or open an issue in this repo.
+Message [Nate Shelly](https://www.linkedin.com/in/nate-shelly/) on LinkedIn or open an issue in this repo.
 
 ---
 
 ## ⚖️ License
 
-MIT License — free to use and modify. Attribution appreciated.
+MIT License — free to use, clone, and modify. Attribution appreciated.

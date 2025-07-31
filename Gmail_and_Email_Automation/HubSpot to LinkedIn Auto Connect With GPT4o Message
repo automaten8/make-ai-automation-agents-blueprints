@@ -1,0 +1,949 @@
+{
+    "name": "HubSpot to LinkedIn Auto-Connect With GPT4o Message",
+    "flow": [
+        {
+            "id": 2,
+            "module": "hubspotcrm:getContact",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 1912907
+            },
+            "mapper": {
+                "contactId": "{ID}",
+                "parseCustomFields": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": -270,
+                    "y": 11,
+                    "name": "Fetch HubSpot Contact Data"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "My HubSpot CRM connection (contact@justvito.io)",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "hubspotcrm"
+                            }
+                        }
+                    },
+                    "expect": {
+                        "contactId": {
+                            "mode": "edit"
+                        },
+                        "outputProperties": {
+                            "mode": "chose"
+                        },
+                        "parseCustomFields": {
+                            "mode": "chose"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:hubspotcrm",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "contactId",
+                        "type": "select",
+                        "label": "Contact ID",
+                        "required": true
+                    },
+                    {
+                        "name": "outputProperties",
+                        "type": "select",
+                        "label": "Output Properties",
+                        "multiple": true
+                    },
+                    {
+                        "name": "parseCustomFields",
+                        "type": "boolean",
+                        "label": "Parse Custom Fields",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "module": "openai-gpt-3:CreateCompletion",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 1796128
+            },
+            "mapper": {
+                "select": "chat",
+                "temperature": ".5",
+                "top_p": "1",
+                "n_completions": "1",
+                "frequency_penalty": ".3",
+                "presence_penalty": ".4",
+                "model": "chatgpt-4o-latest",
+                "max_tokens": "100",
+                "messages": [
+                    {
+                        "role": "assistant",
+                        "content": "You are a messaging assistant that writes short, personalized LinkedIn connection request notes. Your output must be concise, relevant, and 100% focused on the recipient - not on pitching, selling, or talking about yourself.\n\nThe tone should be friendly and direct, with no fluff or generic phrases. Highlight a shared interest, role, or reason for connecting based on the person’s job title, industry, or company.\n\nOutput only the message - do not include greetings like \"Hi\" or \"Hello\" and do not add sign-offs like \"Thanks\" or \"Best.\"\n\n🧾 Input Example (Prompt Template):\n\nWrite a short and personal LinkedIn connection note based on this person's role and company:\n\n- Name: Sarah Johnson\n- Title: Director of Product Marketing\n- Company: Typeform\n- Reason: We're both focused on simplifying customer-facing experiences with automation and personalized UX.\n\n✅ Example Output:\nReally admire how Typeform approaches user-friendly workflows -your work in product marketing must play a huge role in that. Would love to connect.\n\n🔐 DATA REFERENCE FOR PERSONALIZATION\n- First Name: '{{2.properties.firstname}},'\n- Positioning Snapshot (Company): '{positioning_snapshot},'\n- Site Summary & Buyer Insights (Company): 'site_summary_and_buyer_insights'\n- External Signal Scanner (Company): '{external_signal_scanner}'\n- Company Name: '{{2.properties.company}}'\n- Title: '{{2.properties.jobtitle}},'\n- Professional Summary: '{professional_summary},'\n- Headline: '{headline},'\n- Key Skills: 'key_skills},'\n- Role Focus: '{role_focus},'"
+                    }
+                ],
+                "response_format": "text"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 121,
+                    "y": 9,
+                    "name": "Generate Short LinkedIn Connect Message (GPT-4o)"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "My OpenAI connection",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "openai-gpt-3"
+                            }
+                        }
+                    },
+                    "expect": {
+                        "select": {
+                            "label": "Create a Chat Completion (GPT and o1 models)"
+                        },
+                        "logit_bias": {
+                            "mode": "chose"
+                        },
+                        "tool_choice": {
+                            "mode": "chose",
+                            "label": "Empty"
+                        },
+                        "stop": {
+                            "mode": "chose"
+                        },
+                        "additionalParameters": {
+                            "mode": "chose"
+                        },
+                        "model": {
+                            "mode": "chose",
+                            "label": "chatgpt-4o-latest (system)"
+                        },
+                        "messages": {
+                            "mode": "chose",
+                            "items": [
+                                {
+                                    "role": {
+                                        "mode": "chose",
+                                        "label": "Assistant"
+                                    },
+                                    "tool_calls": {
+                                        "mode": "edit"
+                                    }
+                                }
+                            ]
+                        },
+                        "response_format": {
+                            "mode": "chose",
+                            "label": "Text"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:openai-gpt-3",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "select",
+                        "type": "select",
+                        "label": "Select Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "chat",
+                                "prompt"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "temperature",
+                        "type": "number",
+                        "label": "Temperature",
+                        "validate": {
+                            "max": 2,
+                            "min": 0
+                        }
+                    },
+                    {
+                        "name": "top_p",
+                        "type": "number",
+                        "label": "Top P",
+                        "validate": {
+                            "max": 1,
+                            "min": 0
+                        }
+                    },
+                    {
+                        "name": "n_completions",
+                        "type": "number",
+                        "label": "Number"
+                    },
+                    {
+                        "name": "frequency_penalty",
+                        "type": "number",
+                        "label": "Frequency Penalty",
+                        "validate": {
+                            "max": 2,
+                            "min": -2
+                        }
+                    },
+                    {
+                        "name": "presence_penalty",
+                        "type": "number",
+                        "label": "Presence Penalty",
+                        "validate": {
+                            "max": 2,
+                            "min": -2
+                        }
+                    },
+                    {
+                        "name": "logit_bias",
+                        "type": "array",
+                        "label": "Token Probability",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "token",
+                                    "type": "text",
+                                    "label": "Token ID",
+                                    "required": true
+                                },
+                                {
+                                    "name": "probability",
+                                    "type": "number",
+                                    "label": "Probability",
+                                    "required": true,
+                                    "validate": {
+                                        "max": 100,
+                                        "min": -100
+                                    }
+                                }
+                            ],
+                            "type": "collection",
+                            "label": "Token Probability",
+                            "name": "value"
+                        }
+                    },
+                    {
+                        "name": "seed",
+                        "type": "integer",
+                        "label": "Seed"
+                    },
+                    {
+                        "name": "tool_choice",
+                        "type": "select",
+                        "label": "Tool Choice",
+                        "validate": {
+                            "enum": [
+                                "none",
+                                "auto",
+                                "required"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "stop",
+                        "type": "array",
+                        "label": "Stop Sequences",
+                        "validate": {
+                            "maxItems": 4
+                        },
+                        "spec": {
+                            "type": "text",
+                            "label": "Stop Sequence",
+                            "name": "value"
+                        }
+                    },
+                    {
+                        "name": "additionalParameters",
+                        "type": "array",
+                        "label": "Other Input Parameters",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "key",
+                                    "type": "text",
+                                    "label": "Parameter Name",
+                                    "required": true
+                                },
+                                {
+                                    "name": "type",
+                                    "type": "select",
+                                    "label": "Input Type",
+                                    "options": [
+                                        {
+                                            "label": "Text",
+                                            "value": "text",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "text",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ],
+                                            "default": true
+                                        },
+                                        {
+                                            "label": "Number",
+                                            "value": "number",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "number",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "label": "Boolean",
+                                            "value": "boolean",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "boolean",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "label": "Date",
+                                            "value": "date",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "date",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "label": "Any",
+                                            "value": "any",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "any",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "type": "collection",
+                            "label": "Input Parameter",
+                            "name": "value"
+                        }
+                    },
+                    {
+                        "name": "model",
+                        "type": "select",
+                        "label": "Model",
+                        "required": true
+                    },
+                    {
+                        "name": "max_tokens",
+                        "type": "uinteger",
+                        "label": "Max Completion Tokens"
+                    },
+                    {
+                        "name": "messages",
+                        "type": "array",
+                        "label": "Messages",
+                        "required": true,
+                        "spec": {
+                            "label": "Message",
+                            "type": "collection",
+                            "spec": [
+                                {
+                                    "name": "role",
+                                    "type": "select",
+                                    "label": "Role",
+                                    "required": true,
+                                    "options": {
+                                        "store": [
+                                            {
+                                                "label": "User",
+                                                "value": "user",
+                                                "nested": [
+                                                    {
+                                                        "help": "Text content of the message on behalf of the selected __Role__.",
+                                                        "name": "content",
+                                                        "type": "text",
+                                                        "label": "Text Content"
+                                                    },
+                                                    {
+                                                        "name": "imageInputType",
+                                                        "type": "select",
+                                                        "label": "Image Input Type",
+                                                        "mappable": false,
+                                                        "options": [
+                                                            {
+                                                                "value": "url",
+                                                                "label": "URL",
+                                                                "nested": [
+                                                                    {
+                                                                        "name": "imageUrl",
+                                                                        "label": "Image URL",
+                                                                        "type": "url",
+                                                                        "help": "Make sure to use a publicly accessible URL.\nYou can test if your image is publicly accessible by opening the link in an incognito tab."
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "value": "file",
+                                                                "label": "Image File",
+                                                                "nested": [
+                                                                    {
+                                                                        "name": "imageFile",
+                                                                        "label": "Image",
+                                                                        "type": "collection",
+                                                                        "spec": [
+                                                                            {
+                                                                                "name": "imageFilename",
+                                                                                "type": "filename",
+                                                                                "label": "Image Filename",
+                                                                                "semantic": "file:name",
+                                                                                "extension": [
+                                                                                    "jpg",
+                                                                                    "jpeg",
+                                                                                    "png",
+                                                                                    "webp",
+                                                                                    "gif"
+                                                                                ],
+                                                                                "help": "Accepted extensions: `.jpg`, `.jpeg`, `.png`, `.webp` and `.gif`."
+                                                                            },
+                                                                            {
+                                                                                "name": "imageData",
+                                                                                "type": "buffer",
+                                                                                "label": "Image Data",
+                                                                                "semantic": "file:data"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "name": "imageDetail",
+                                                        "type": "select",
+                                                        "label": "Image Detail",
+                                                        "help": "Recommended value: `Auto`",
+                                                        "options": [
+                                                            {
+                                                                "value": "auto",
+                                                                "default": true,
+                                                                "label": "Auto"
+                                                            },
+                                                            {
+                                                                "value": "high",
+                                                                "label": "High"
+                                                            },
+                                                            {
+                                                                "value": "low",
+                                                                "label": "Low"
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "label": "Assistant",
+                                                "value": "assistant",
+                                                "nested": [
+                                                    {
+                                                        "help": "Text content of the message on behalf of the selected __Role__.",
+                                                        "name": "content",
+                                                        "type": "text",
+                                                        "label": "Text Content"
+                                                    },
+                                                    {
+                                                        "name": "tool_calls",
+                                                        "label": "Tool Calls",
+                                                        "type": "array",
+                                                        "labels": {
+                                                            "add": "Add tool call"
+                                                        },
+                                                        "mode": "edit",
+                                                        "mappable": {
+                                                            "help": "You can map the entire `Choices[]: Message.Tool Calls` array from a previous Create a Completion module here."
+                                                        },
+                                                        "spec": {
+                                                            "label": "Tool Call",
+                                                            "type": "collection",
+                                                            "spec": [
+                                                                {
+                                                                    "name": "type",
+                                                                    "type": "hidden",
+                                                                    "default": "function"
+                                                                },
+                                                                {
+                                                                    "name": "id",
+                                                                    "type": "text",
+                                                                    "label": "Tool call ID",
+                                                                    "help": "Map this directly from the output of a previous **Create a Completion** module. Look for `Choices[]: Message.Tool Calls[]: ID`."
+                                                                },
+                                                                {
+                                                                    "name": "function",
+                                                                    "type": "collection",
+                                                                    "label": "Function",
+                                                                    "spec": [
+                                                                        {
+                                                                            "name": "name",
+                                                                            "label": "Name",
+                                                                            "type": "text",
+                                                                            "required": true,
+                                                                            "help": "The name of the function previously called."
+                                                                        },
+                                                                        {
+                                                                            "name": "arguments",
+                                                                            "label": "Arguments",
+                                                                            "type": "text",
+                                                                            "required": true,
+                                                                            "help": "The arguments previously output by the AI."
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "label": "Developer / System",
+                                                "nested": [
+                                                    {
+                                                        "help": "Text content of the message on behalf of the selected __Role__.",
+                                                        "name": "content",
+                                                        "type": "text",
+                                                        "label": "Text Content"
+                                                    }
+                                                ],
+                                                "value": "system"
+                                            },
+                                            {
+                                                "label": "Tool",
+                                                "value": "tool",
+                                                "nested": [
+                                                    {
+                                                        "help": "The return of the function. This role should only be used when you have processed a previous function call and want to send the output of the function execution back to the AI.",
+                                                        "name": "content",
+                                                        "type": "text",
+                                                        "label": "Text Content",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "label": "Tool Call ID.",
+                                                        "name": "tool_call_id",
+                                                        "type": "text",
+                                                        "required": true,
+                                                        "help": "Map this directly from the output of a previous **Create a Completion** module. Look for `Choices[]: Message.Tool Calls[]: ID`."
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "name": "value"
+                        }
+                    },
+                    {
+                        "name": "response_format",
+                        "type": "select",
+                        "label": "Response Format",
+                        "validate": {
+                            "enum": [
+                                "text",
+                                "json_object"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "prediction",
+                        "type": "text",
+                        "label": "Predicted Outputs"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "result",
+                        "type": "any",
+                        "label": "Result"
+                    },
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "ID"
+                    },
+                    {
+                        "name": "object",
+                        "type": "text",
+                        "label": "Object"
+                    },
+                    {
+                        "name": "created",
+                        "type": "date",
+                        "label": "Created"
+                    },
+                    {
+                        "name": "model",
+                        "type": "text",
+                        "label": "Model"
+                    },
+                    {
+                        "name": "choices",
+                        "spec": [
+                            {
+                                "name": "text",
+                                "type": "text",
+                                "label": "Text"
+                            },
+                            {
+                                "name": "index",
+                                "type": "number",
+                                "label": "Index"
+                            },
+                            {
+                                "name": "logprobs",
+                                "type": "text",
+                                "label": "Log Probs"
+                            },
+                            {
+                                "name": "finish_reason",
+                                "type": "text",
+                                "label": "Finish Reason"
+                            },
+                            {
+                                "name": "message",
+                                "spec": [
+                                    {
+                                        "name": "role",
+                                        "type": "text",
+                                        "label": "Role"
+                                    },
+                                    {
+                                        "name": "content",
+                                        "type": "text",
+                                        "label": "Content"
+                                    },
+                                    {
+                                        "name": "tool_calls",
+                                        "spec": [
+                                            {
+                                                "name": "id",
+                                                "type": "text",
+                                                "label": "ID"
+                                            },
+                                            {
+                                                "name": "type",
+                                                "type": "text",
+                                                "label": "Type"
+                                            },
+                                            {
+                                                "name": "function",
+                                                "spec": [
+                                                    {
+                                                        "name": "name",
+                                                        "type": "text",
+                                                        "label": "Name"
+                                                    },
+                                                    {
+                                                        "name": "arguments",
+                                                        "type": "text",
+                                                        "label": "Arguments"
+                                                    }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Function"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Tool Calls"
+                                    },
+                                    {
+                                        "name": "refusal",
+                                        "type": "text",
+                                        "label": "Refusal"
+                                    },
+                                    {
+                                        "name": "annotations",
+                                        "spec": [
+                                            {
+                                                "name": "type",
+                                                "type": "text",
+                                                "label": "Type"
+                                            },
+                                            {
+                                                "name": "url_citation",
+                                                "spec": [
+                                                    {
+                                                        "name": "end_index",
+                                                        "type": "number",
+                                                        "label": "End Index"
+                                                    },
+                                                    {
+                                                        "name": "start_index",
+                                                        "type": "number",
+                                                        "label": "Start Index"
+                                                    },
+                                                    {
+                                                        "name": "title",
+                                                        "type": "text",
+                                                        "label": "Title"
+                                                    },
+                                                    {
+                                                        "name": "url",
+                                                        "type": "text",
+                                                        "label": "URL"
+                                                    }
+                                                ],
+                                                "type": "collection",
+                                                "label": "URL Citation"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Annotations"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Message"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Choices"
+                    },
+                    {
+                        "name": "usage",
+                        "spec": [
+                            {
+                                "name": "prompt_tokens",
+                                "type": "number",
+                                "label": "Prompt Tokens"
+                            },
+                            {
+                                "name": "completion_tokens",
+                                "type": "text",
+                                "label": "Completion Tokens"
+                            },
+                            {
+                                "name": "total_tokens",
+                                "type": "number",
+                                "label": "Total Tokens"
+                            },
+                            {
+                                "name": "prompt_tokens_details",
+                                "spec": [
+                                    {
+                                        "name": "cached_tokens",
+                                        "type": "uinteger",
+                                        "label": "Cached Tokens"
+                                    },
+                                    {
+                                        "name": "text_tokens",
+                                        "type": "uinteger",
+                                        "label": "Text Tokens"
+                                    },
+                                    {
+                                        "name": "image_tokens",
+                                        "type": "uinteger",
+                                        "label": "Image Tokens"
+                                    },
+                                    {
+                                        "name": "audio_tokens",
+                                        "type": "uinteger",
+                                        "label": "Audio Tokens"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Prompt Tokens Details"
+                            },
+                            {
+                                "name": "completion_tokens_details",
+                                "spec": [
+                                    {
+                                        "name": "reasoning_tokens",
+                                        "type": "uinteger",
+                                        "label": "Reasoning Tokens"
+                                    },
+                                    {
+                                        "name": "text_tokens",
+                                        "type": "uinteger",
+                                        "label": "Text Tokens"
+                                    },
+                                    {
+                                        "name": "audio_tokens",
+                                        "type": "uinteger",
+                                        "label": "Audio Tokens"
+                                    },
+                                    {
+                                        "name": "accepted_prediction_tokens",
+                                        "type": "uinteger",
+                                        "label": "Accepted Prediction Tokens"
+                                    },
+                                    {
+                                        "name": "rejected_prediction_tokens",
+                                        "type": "uinteger",
+                                        "label": "Rejected Prediction Tokens"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Completion Tokens Details"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Usage"
+                    },
+                    {
+                        "name": "service_tier",
+                        "type": "text",
+                        "label": "Service Tier"
+                    },
+                    {
+                        "name": "system_fingerprint",
+                        "type": "text",
+                        "label": "System Fingerprint"
+                    }
+                ],
+                "advanced": true
+            }
+        },
+        {
+            "id": 4,
+            "module": "custom-js:runPuppeteer",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 4076083,
+                "returnValueType": "binary"
+            },
+            "mapper": {
+                "code": "module.exports = async ({ page, data }) => {\n    const url = data.linkedinUrl; // Must be a full https:// LinkedIn profile URL\n    const message = data.connectMessage; // Personalized message string from OpenAI\n\n    // Navigate to the LinkedIn profile\n    await page.goto(url, { waitUntil: 'networkidle2' });\n\n    // Optional: Screenshot before interaction\n    await page.screenshot({ path: '/tmp/debug_screenshot.png' });\n\n    let connectClicked = false;\n\n    // Try clicking the \"Connect\" or \"Invite\" button directly\n    try {\n        await page.waitForSelector('button[aria-label*=\"Connect\"], button[aria-label=\"Invite\"]', {\n            visible: true,\n            timeout: 5000\n        });\n        await page.click('button[aria-label*=\"Connect\"], button[aria-label=\"Invite\"]');\n        connectClicked = true;\n    } catch (error) {\n        console.warn(`⚠️ 'Connect' button not found directly. Trying 'More actions' fallback...`);\n    }\n\n    // Fallback: click \"More actions\" → \"Connect\"\n    if (!connectClicked) {\n        try {\n            await page.waitForSelector('button[aria-label=\"More actions\"]', { visible: true, timeout: 5000 });\n            await page.click('button[aria-label=\"More actions\"]');\n\n            await page.waitForSelector('div[role=\"menuitem\"]:has-text(\"Connect\")', { visible: true, timeout: 5000 });\n            await page.click('div[role=\"menuitem\"]:has-text(\"Connect\")');\n        } catch (error) {\n            throw new Error(`❌ Could not find 'Connect' option on the profile: ${url}`);\n        }\n    }\n\n    // Wait for the Add a note button and click it\n    try {\n        await page.waitForSelector('button[aria-label=\"Add a note\"]', { visible: true, timeout: 5000 });\n        await page.click('button[aria-label=\"Add a note\"]');\n    } catch (error) {\n        throw new Error(`❌ 'Add a note' button not found. Cannot attach message.`);\n    }\n\n    // Wait for message text area and type the custom message\n    try {\n        await page.waitForSelector('textarea[name=\"message\"]', { visible: true, timeout: 5000 });\n        await page.type('textarea[name=\"message\"]', message, { delay: 10 });\n    } catch (error) {\n        throw new Error(`❌ Failed to type message in textarea.`);\n    }\n\n    // Send the invitation with message\n    try {\n        await page.waitForSelector('button[aria-label=\"Send now\"], button[aria-label=\"Send invitation\"]', {\n            visible: true,\n            timeout: 5000\n        });\n        await page.click('button[aria-label=\"Send now\"], button[aria-label=\"Send invitation\"]');\n    } catch (error) {\n        throw new Error(`❌ 'Send invitation' button not found on the profile: ${url}`);\n    }\n\n    return { message: `✅ Connection request sent successfully with message to ${url}` };\n};\n​"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 605,
+                    "y": 10,
+                    "name": "Send LinkedIn Connect w/ GPT Message Custom JS"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "My Custom JS V2 connection",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "custom-js2"
+                            }
+                        },
+                        "returnValueType": {
+                            "label": "Screenshot (PNG)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:custom-js2",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "returnValueType",
+                        "type": "select",
+                        "label": "Return Type",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "text",
+                                "binary"
+                            ]
+                        }
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "code",
+                        "type": "text",
+                        "label": "Puppeteer Commands."
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "output",
+                        "type": "binary",
+                        "label": "Output"
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us1.make.com",
+        "notes": [
+            {
+                "moduleIds": [
+                    2
+                ],
+                "content": "<p><strong>Use a different CRM?</strong> Replace this module with your CRM's node.</p><p></p><p><strong>Need help?</strong> Ping <a href=\"https://Need help? Ping Nate Shelly on LinkedIn\" target=\"_blank\">Nate Shelly</a></p>",
+                "isFilterNote": false,
+                "metadata": {
+                    "color": "#9138FE"
+                }
+            },
+            {
+                "moduleIds": [
+                    4
+                ],
+                "content": "<p><strong>What does this JavaScript do?</strong></p><p></p><p><strong>Automates a LinkedIn connection request using a headless browser with a personalized message.</strong></p><ul><li>Visits a LinkedIn profile URL provided by your CRM</li><li>Clicks \"Connect\" (or uses fallback via “More actions” menu)</li><li>Clicks \"Add a note\", types a personalized message (e.g., from OpenAI GPT4o)</li><li>Sends the invitation with that message</li><li>Takes a screenshot before interaction</li><li>Throws detailed errors if any key element is missing</li></ul><p></p><p><strong>Requires a browser automation runtime</strong> (e.g., headless Chrome via Puppeteer, Browserless, or similar)</p><p></p><p><strong>Notes</strong></p><ul><li>data.linkedinUrl: Must be a valid LinkedIn profile URL in HTTPS format</li><li>data.connectMessage: The dynamic message to send (e.g., generated by GPT-4o in a previous module)</li></ul><p></p><p><strong>Want to modify the action?</strong></p><p>Replace the JavaScript code inside this module to handle different interactions, scraping, or browser logic.</p><p></p><p><strong>Need help?</strong> Ping <a href=\"https://#\" target=\"_blank\">Nate Shelly</a></p>",
+                "isFilterNote": false,
+                "metadata": {
+                    "color": "#9138FE"
+                }
+            },
+            {
+                "moduleIds": [
+                    5
+                ],
+                "content": "<p><strong>Purpose:</strong></p><p>Generates a concise and personalized LinkedIn connection note using GPT-4o. The message is focused entirely on the recipient - their role, company, and focus - with no sales pitch or mention of you.</p><p></p><p><strong>Tone:</strong></p><p>Friendly, direct, and relevant. No fluff, greetings, or sign-offs.</p><p></p><p><strong>Prompt Logic:</strong></p><p>The system prompt includes:</p><ul><li>The recipient’s title, company, and professional context</li><li>Data-enriched context from external signal scanning, company positioning, and buyer insights</li><li>Specific instruction to stay under 300 characters (LinkedIn's message limit)</li></ul><p></p><p><strong>Inputs Used:</strong></p><ul><li>First Name: {{173.\\0`}}`</li><li>Title: {{173.\\2`}}`</li><li>Company Name: {{284.result}}</li><li>Positioning Snapshot: {{194.result}}</li><li>Buyer Insights: {{285.choices[].message.content}}</li><li>External Signals: {{286.choices[].message.content}}</li><li>Professional Summary: {{252.professional_summary}}</li><li>Headline: {{252.headline}}</li><li>Key Skills: {{252.key_skills}}</li><li>Role Focus: {{252.role_focus}}</li></ul><p></p><p><strong>Output:</strong></p><p>A clean, short message ready to inject into the browser-based JavaScript module that sends a LinkedIn connection request.</p><p></p><p><strong>Need a different output or behavior?</strong></p><p>You can update the system prompt, swap out any dynamic data fields listed under <strong>🔐 DATA REFERENCE FOR PERSONALIZATION</strong>, or adjust settings like <strong>Max Tokens</strong>, <strong>Temperature</strong>, and other model parameters directly within this module. <strong>You can also add HTTP modules to connect with third-party APIs for scraping or enriching data from platforms like LinkedIn, X (Twitter), or other social sources using RapidAPI or Apify.</strong></p><p></p><p><strong>Need help?</strong> Ping <a href=\"https://#\" target=\"_blank\">Nate Shelly</a></p>",
+                "isFilterNote": false,
+                "metadata": {
+                    "color": "#9138FE"
+                }
+            }
+        ]
+    }
+}

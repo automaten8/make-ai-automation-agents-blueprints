@@ -1,8 +1,4 @@
-Of course! Here is the README file with emojis added back in for a more engaging and scannable look.
-
----
-
-# ✨ Make AI Automation Agents & Blueprints
+# 🫠 Make Autonomous Agents & Blueprints
 
 ## An AI-first library of modular, production-ready automation blueprints built in Make.com.
 
@@ -12,7 +8,7 @@ From intelligent outbound outreach and dynamic CRM enrichment to automated inter
 
 ---
 
-## 🚀 Key Features
+## ⚡ Key Features
 
 * **Autonomous Agents:** 🤖 Deploy intelligent agents that can qualify leads, send personalized emails, visit profiles, and respond with dynamic, contextual awareness.
 * **Modular & Reusable Components:** 🧩 Leverage pre-built, reusable modules like `book_meeting` and `get_available_calendar_slots` to accelerate your own automation development.
@@ -98,4 +94,4 @@ Have questions, feedback, or need assistance?
 
 ## 📄 License
 
-This project is licensed under the **MIT License**. You are free to use, clone, and modify it. Attribution is greatly appreciated. ❤️
+This project is licensed under the **MIT License**. You are free to use, clone, and modify it. Attribution is greatly appreciated. 🫠

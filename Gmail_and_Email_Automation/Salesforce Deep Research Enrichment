@@ -1,5 +1,5 @@
 {
-    "name": "Salesforce Deep Research Enrichment",
+    "name": "Salesforce CRM Deep Research Enrichment",
     "flow": [
         {
             "id": 1,
